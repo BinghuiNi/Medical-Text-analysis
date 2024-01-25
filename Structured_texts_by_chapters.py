@@ -69,7 +69,7 @@ def cut_main(content):
     return background, return_content
 
 
-df = pd.read_excel(r'C:\Users\nibh\Desktop\科大讯飞\2023.12.06_吕梁市医保局-爬虫文件_去除首尾噪音.xls',sheet_name='Sheet2',header=None)
+df = pd.read_excel(r'path\xxx.xls',sheet_name='Sheet2',header=None)
 ls_info = []
 for i in range(len(df)):
     background, return_content = cut_main(df.iloc[i,3])
@@ -82,6 +82,6 @@ for i in range(len(df)):
                 "Content_piece":text}
         ls_info.append(item)
 
-with open("2023.12.14_吕梁市医保局-爬虫文件_标题分割.jsonl", "w", encoding="utf-8") as f:
+with open("xxx.jsonl", "w", encoding="utf-8") as f:
     for item in ls_info:
         f.write(json.dumps(item, ensure_ascii=False)+'\n')
