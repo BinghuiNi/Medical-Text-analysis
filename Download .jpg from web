@@ -1,0 +1,44 @@
+# -*- coding: UTF-8 -*-
+urls = ["http://www.nhsa.gov.cn/art/2024/1/12/art_104_11952.html",
+        "http://www.nhsa.gov.cn/art/2024/1/5/art_104_11913.html",
+        "http://www.nhsa.gov.cn/art/2023/11/23/art_104_11554.html",
+        "http://www.nhsa.gov.cn/art/2023/9/13/art_104_11259.html",
+        "http://www.nhsa.gov.cn/art/2023/9/5/art_104_11226.html",
+        "http://www.nhsa.gov.cn/art/2023/7/28/art_104_11108.html",
+        "http://www.nhsa.gov.cn/art/2023/7/15/art_104_11018.html",
+        "http://www.nhsa.gov.cn/art/2023/7/10/art_104_10993.html",
+        "http://www.nhsa.gov.cn/art/2023/6/16/art_104_10842.html",
+        "http://www.nhsa.gov.cn/art/2023/5/29/art_104_10680.html",
+        "http://www.nhsa.gov.cn/art/2023/4/28/art_104_10547.html",
+        "http://www.nhsa.gov.cn/art/2023/3/28/art_104_10299.html",
+        "http://www.nhsa.gov.cn/art/2023/2/23/art_104_10187.html",
+        "http://www.nhsa.gov.cn/art/2023/2/15/art_104_10166.html",
+        "http://www.nhsa.gov.cn/art/2023/1/6/art_104_9993.html",
+        "http://www.nhsa.gov.cn/art/2023/1/7/art_104_9995.html",
+        "http://www.nhsa.gov.cn/art/2022/11/25/art_104_9838.html",
+        "http://www.nhsa.gov.cn/art/2022/9/9/art_104_9053.html",
+        "http://www.nhsa.gov.cn/art/2022/8/31/art_104_8934.html",
+        ]
+import requests
+from bs4 import BeautifulSoup
+import re
+import os
+
+header = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'}
+imgtags = []
+
+for u in urls:
+    r = requests.get(u, headers=header)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    title = soup.find('meta', {'name': 'ArticleTitle'}).get('content').encode('latin-1').decode('utf-8')
+    image_meta_tags = soup.find_all('meta', {'name': 'Image', 'content': re.compile(r'\.(jpg|png)$')})
+    image_links = [tag['content'] for tag in image_meta_tags]
+    n = 1
+    for p in image_links:
+        response = requests.get(p, headers=header)
+        os.chdir(r'C:\Users\nibh\Desktop\path')
+        with open('{}-{}.{}'.format(title, n, p.split('.')[-1]), 'wb') as f:
+            f.write(response.content)
+        n += 1
+        
